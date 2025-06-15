@@ -44,17 +44,21 @@ A simple photo sharing web application where users can upload, view, and like im
 
 6. Generate SSL Certificates (Local Only).
 
+      Note: this requires SLL Certificates which are not uploaded to github
+   
+      Create a certs/ folder in the project directory -> Run the OpenSSL command in the terminal.
+
       openssl req -nodes -new -x509 -keyout certs/key.pem -out certs/cert.pem
 
       This creates a self-signed certificate so the site can run on https://localhost.
 
-7. Start the Server.
+8. Start the Server.
 
       node server.js
 
       Open https://localhost:3000 in your browser. You may need to accept the security warning due to the self-signed certificate.
 
-# Structure
+## Structure
 - /public: Contains frontend HTML,CSS, JS
 - /certs: SSL certificates (self-signed for dev and not included in repo)
 - server.js: Main Express app with routing, HTTPS, caching, and security
@@ -78,11 +82,12 @@ I followed these steps to generate the certificate:
 
 1. Created a certs/ folder in the project directory.
 
-2. Ran the OpenSSL command in the terminal:
+2. Run the OpenSSL command in the terminal:
 
       openssl req -nodes -new -x509 -keyout certs/key.pem -out certs/cert.pem
-3. Filled in dummy certificate information (e.g., country, common name, etc.).
-4. Updated my .env file to include:
+   
+4. Filled in dummy certificate information (e.g., country, common name, etc.).
+5. Updated my .env file to include:
 
          # HTTPS Certs
                SSL_KEY_PATH=./certs/key.pem
@@ -122,7 +127,7 @@ CSP significantly lowers the chance of successful Cross-Site Scripting (XSS) by 
 
 These headers establish a hardened baseline for browser behavior, helping to enforce policies and reduce attack surfaces. Together, they provide strong browser-level defenses to augment server-side validation.
 
-# The main challenges I faced were:
+## The main challenges I faced were:
 
 1. Self-Signed SSL Warnings in Browser: Initially, the browser would block access due to the untrusted certificate authority. I resolved this by manually accepting the risk in the browser (as expected during local development).
 
