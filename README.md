@@ -1,4 +1,4 @@
-# Photo Sharing App – Web Security Assignment:
+# Phase 1 - Photo Sharing App – Web Security Assignment:
 
 A simple photo sharing web application where users can upload, view, and like images. I have not included  Community-focused features like follow at Phase 1 of the assignment. 
 
