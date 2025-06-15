@@ -11,42 +11,41 @@ A simple photo sharing web application where users can upload, view, and like im
 
 ## Setup:
 
-- 1. Clone the repository
+1. Clone the repository
       git clone https://github.com/PeraltaFrian/photo-sharing.git
       cd photo-sharing
 
-- 2.  Install dependencies
+2.  Install dependencies
       npm install
 
-- 3. Set Up Environment Variables
+3. Set Up Environment Variables
 
       Note: this requires environmental variables which is not uploaded to github
 
       Create a .env file in the root folder with the following:
       
-      # Contentful Settings
-      CONTENTFUL_SPACE_ID=your_space_id
-      CONTENTFUL_ENVIRONMENT_ID=master
-      CONTENTFUL_DELIVERY_TOKEN=your_delivery_token
-      CONTENTFUL_MANAGEMENT_TOKEN=your_management_token
+         # Contentful Settings
+               CONTENTFUL_SPACE_ID=your_space_id
+               CONTENTFUL_ENVIRONMENT_ID=master
+               CONTENTFUL_DELIVERY_TOKEN=your_delivery_token
+               CONTENTFUL_MANAGEMENT_TOKEN=your_management_token
 
-      # HTTPS Certs 
-      SSL_KEY_PATH=./certs/key.pem
-      SSL_CERT_PATH=./certs/cert.pem
-
-      # Server Port
-      PORT=3000
+         # HTTPS Certs
+               SSL_KEY_PATH=./certs/key.pem
+               SSL_CERT_PATH=./certs/cert.pem
+         # Server Port
+               PORT=3000 
 
      Make sure your Contentful space has a content type called photoShare with the fields:  
      name, description, image, and like.
 
-- 4. Generate SSL Certificates (Local Only).
+5. Generate SSL Certificates (Local Only).
 
       openssl req -nodes -new -x509 -keyout certs/key.pem -out certs/cert.pem
 
       This creates a self-signed certificate so the site can run on https://localhost.
 
-- 5. Start the Server.
+6. Start the Server.
 
       node server.js
 
@@ -67,55 +66,54 @@ Note: This app runs only on `https://localhost` with a self-signed certificate. 
 3. Click on any photo to view it larger on the right (big screen) or bottom (small screen)
 4. Click dropdown to choose the photo's likes (max 5)
 
-## PART B:
+# PART B:
 ## SSL Setup and Reflection:
 
 For this assignment, I chose to use OpenSSL to generate a self-signed SSL certificate for local development. Since the application is not deployed online and only runs on localhost, a self-signed certificate was the most practical and efficient option. It allowed me to implement HTTPS without needing a domain or relying on third-party services like Let’s Encrypt, which are better suited for live production environments.
 
 I followed these steps to generate the certificate:
 
-- 1. Created a certs/ folder in the project directory.
+1. Created a certs/ folder in the project directory.
 
-- 2. Ran the OpenSSL command in the terminal:
+2. Ran the OpenSSL command in the terminal:
 
       openssl req -nodes -new -x509 -keyout certs/key.pem -out certs/cert.pem
-- 3. Filled in dummy certificate information (e.g., country, common name, etc.).
-- 4. Updated my .env file to include:
-      
-      # HTTPS Certs 
-      SSL_KEY_PATH=./certs/key.pem
-      SSL_CERT_PATH=./certs/cert.pem
+3. Filled in dummy certificate information (e.g., country, common name, etc.).
+4. Updated my .env file to include:
 
-      # Server Port
-      PORT=3000
+         # HTTPS Certs
+               SSL_KEY_PATH=./certs/key.pem
+               SSL_CERT_PATH=./certs/cert.pem
+         # Server Port
+               PORT=3000 
 
-- 5.  In server.js, I used Node's https.createServer() method and passed in the key and certificate files to launch the app securely over HTTPS on port 3000.
+6.  In server.js, I used Node's https.createServer() method and passed in the key and certificate files to launch the app securely over HTTPS on port 3000.
 
 Although browsers display a warning with self-signed certificates, this method allowed me to test HTTPS functionality and secure headers in a real-world-like environment. I now feel more confident about implementing proper SSL in future projects. Overall, this setup was ideal for local development and matched the scope of this assignment.
 
-## PART C: 
+# PART C: 
 ## Secure HTTP Headers
-# HTTPS Server Set-up
+## HTTPS Server Set-up
 I integrated a self-signed SSL certificate using OpenSSL for local development. The Express server uses https.createServer() with key.pem and cert.pem stored in the /certs folder. This ensures all traffic is encrypted end-to-end, even during testing.
-# Helmet Middleware Configuration
+## Helmet Middleware Configuration
 To secure the application at the HTTP layer, I used Helmet.js, which sets a variety of security-related HTTP headers. Below are the headers I implemented and the rationale behind each:
 - Content-Security-Policy: Limited image sources to server and Contentful CDN. Prevents Cross-Site Scripting (XSS) by disallowing unauthorized sources.
 - X-Content-Type-Options: nosniff - Prevents MIME-type sniffing.
 - X-Frame-Options: DENY - Helps prevent clickjacking.
 - X-XSS-Protection: Adds basic XSS protection.
 
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        imgSrc: ["'self'", "https://images.ctfassets.net", "data:"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-      },
-    },
-  })
-);
+
+      app.use(
+         helmet({
+           contentSecurityPolicy: {
+              directives: {
+                    defaultSrc: ["'self'"], imgSrc: ["'self'", "https://images.ctfassets.net", "data:"],
+                    scriptSrc: ["'self'", "'unsafe-inline'"],
+                    styleSrc: ["'self'", "'unsafe-inline'"],
+              },
+           },
+         })
+      ); 
 
 CSP significantly lowers the chance of successful Cross-Site Scripting (XSS) by restricting where scripts, images, and styles can load from. I allowed only 'self', unsafe-inline (temporarily for dev), and trusted image sources (Contentful CDN).
 
@@ -123,15 +121,15 @@ These headers establish a hardened baseline for browser behavior, helping to enf
 
 # The main challenges I faced were:
 
-- 1. Self-Signed SSL Warnings in Browser: Initially, the browser would block access due to the untrusted certificate authority. I resolved this by manually accepting the risk in the browser (as expected during local development).
+1. Self-Signed SSL Warnings in Browser: Initially, the browser would block access due to the untrusted certificate authority. I resolved this by manually accepting the risk in the browser (as expected during local development).
 
-- 2. Content Security Policy (CSP) Blocking Assets: CSP initially blocked inline scripts and styles, which caused my client-side JavaScript to fail. To resolve this:
+2. Content Security Policy (CSP) Blocking Assets: CSP initially blocked inline scripts and styles, which caused my client-side JavaScript to fail. To resolve this:
  * I allowed 'unsafe-inline' temporarily for development.
  * I explicitly whitelisted the Contentful CDN (images.ctfassets.net) for images.
  * I confirmed the CSP directive was not overly broad to avoid reducing its effectiveness.
 
-## PART D:
-# Design Routes and Implement Cache Control
+# PART D:
+## Design Routes and Implement Cache Control
 I have defined five core routes in the Photo Sharing App. Each route serves a clear purpose and includes an appropriate caching policy that balances speed with security. All cache control strategies are explicitly documented and tailored to the app’s needs.
 
 - Route 1: GET /photos
@@ -170,19 +168,19 @@ I have defined five core routes in the Photo Sharing App. Each route serves a cl
       Reason: These files rarely change during active use, so caching them for 10 minutes improves load time. Suitable for client-side assets like stylesheets and scripts.
       Security: As these files don’t contain sensitive info, caching them is safe and efficient.
 
-# Caching Strategy
+## Caching Strategy
 Each route was analyzed to determine whether its content benefits from caching and whether that caching could introduce security risks.
 * Public, non-sensitive data (photos, UI files) is cached briefly to improve speed and reduce server load.
 * GET /photos and GET /photos/:id use 5-minute cache with optional stale-while-revalidate to balance performance and freshness.
 * Static assets (.js, .css, .html) are cached for 10 minutes for performance.
 * Dynamic or user-interactive routes (uploads and likes) explicitly disable caching to preserve data integrity and protect against replay vulnerabilities.
 
-# Trade-Offs and Design Choices
+## Trade-Offs and Design Choices
 * I used stale-while-revalidate on the main photo listing route (GET /photos) to balance freshness with user experience. This means users get quick responses, and the data quietly updates in the background.
 * For likes and uploads, I made a clear trade-off in favor of security and accuracy over performance, using no-store.
 * I used short max-age values (5–10 minutes) to avoid outdated content and ensure recent posts appear without requiring a hard refresh.
 
-## Reflection & Lessons Learned
+# Reflection & Lessons Learned
 
 This assignment was a great way to understand web security in practice. I often hear about HTTPS and secure headers, but implementing them myself made the concepts more real.
 
@@ -194,7 +192,7 @@ This assignment was a great way to understand web security in practice. I often 
 
 - CSP Blocking Images: The images weren’t loading at first because my Content Security Policy (img-src) didn’t allow external domains. I added Contentful’s CDN (images.ctfassets.net) to fix it.
 
-## What I learned:
+# What I learned:
 - How to generate and configure a self-signed SSL certificate to run a secure HTTPS server locally.
 - Using Helmet middleware to enhance security by setting various HTTP headers in an Express.js app.
 - The critical importance of verifying data model constraints when working with headless CMS platforms like Contentful to avoid errors.
