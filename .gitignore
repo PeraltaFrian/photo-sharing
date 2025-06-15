@@ -1,0 +1,16 @@
+# Ignore environment variables
+.env
+
+# SSL certificates
+certs/
+
+# Node modules (don't push this to GitHub)
+node_modules/
+
+
+# Logs
+logs
+*.log
+
+# OS-specific stuff
+.DS_Store
