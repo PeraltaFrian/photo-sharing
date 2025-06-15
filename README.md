@@ -12,13 +12,16 @@ A simple photo sharing web application where users can upload, view, and like im
 ## Setup:
 
 1. Clone the repository
-      git clone https://github.com/PeraltaFrian/photo-sharing.git
-      cd photo-sharing
 
-2.  Install dependencies
-      npm install
+   git clone https://github.com/PeraltaFrian/photo-sharing.git
 
-3. Set Up Environment Variables
+   cd photo-sharing
+
+3.  Install dependencies
+
+          npm install
+
+5. Set Up Environment Variables
 
       Note: this requires environmental variables which is not uploaded to github
 
@@ -39,13 +42,13 @@ A simple photo sharing web application where users can upload, view, and like im
      Make sure your Contentful space has a content type called photoShare with the fields:  
      name, description, image, and like.
 
-5. Generate SSL Certificates (Local Only).
+6. Generate SSL Certificates (Local Only).
 
       openssl req -nodes -new -x509 -keyout certs/key.pem -out certs/cert.pem
 
       This creates a self-signed certificate so the site can run on https://localhost.
 
-6. Start the Server.
+7. Start the Server.
 
       node server.js
 
@@ -53,7 +56,7 @@ A simple photo sharing web application where users can upload, view, and like im
 
 # Structure
 - /public: Contains frontend HTML,CSS, JS
-- /certs: SSL certificates (self-signed for dev)
+- /certs: SSL certificates (self-signed for dev and not included in repo)
 - server.js: Main Express app with routing, HTTPS, caching, and security
 - .env: Environment config (not included in repo)
 
@@ -130,43 +133,49 @@ These headers establish a hardened baseline for browser behavior, helping to enf
 
 # PART D:
 ## Design Routes and Implement Cache Control
-I have defined five core routes in the Photo Sharing App. Each route serves a clear purpose and includes an appropriate caching policy that balances speed with security. All cache control strategies are explicitly documented and tailored to the app’s needs.
+I have defined six core routes in the Photo Sharing App. Each route serves a clear purpose and includes an appropriate caching policy that balances speed with security. All cache control strategies are explicitly documented and tailored to the app’s needs.
 
 - Route 1: GET /photos
-      Purpose: Returns all photo posts from Contentful to populate the gallery view.
-      Caching Policy: Cache-Control: public, max-age=300, stale-while-revalidate=60
-      Reason: Improves performance by letting browsers and CDNs cache the photo feed for 5 minutes. The stale-while-revalidate directive allows the browser to serve a slightly outdated version while revalidating in the background — speeding up response time without sacrificing freshness.
-      Security: Only public data is included (image, description, likes), so caching poses no privacy risk.
+
+        - Purpose: Returns all photo posts from Contentful to populate the gallery view.
+        - Caching Policy: Cache-Control: public, max-age=300, stale-while-revalidate=60
+        - Reason: Improves performance by letting browsers and CDNs cache the photo feed for 5 minutes. The stale-while-revalidate directive allows the browser to serve a slightly outdated version while revalidating in the background — speeding up response time without sacrificing freshness.
+        - Security: Only public data is included (image, description, likes), so caching poses no privacy risk.
 
 - Route 2: GET /photos/:id
-      Purpose: Retrieves a specific photo by its unique ID.
-      Caching Policy: Cache-Control: public, max-age=300
-      Reason: Individual photo content is static and safe to cache short-term. Helps reduce server load and speeds up page transitions. I am not using it now for my front-end but I intend to use it in future phases of the assignment.
-      Security: Currently, all photos are public. In future versions, sensitive images could be role-restricted.
+
+        - Purpose: Retrieves a specific photo by its unique ID.
+        - Caching Policy: Cache-Control: public, max-age=300
+        - Reason: Individual photo content is static and safe to cache short-term. Helps reduce server load and speeds up page transitions. I included it in my server.js but I am not using it now for my front-end, I intend to use it in future phases of the assignment.
+        - Security: Currently, all photos are public. In future phases, sensitive images could be role-restricted.
 
 - Route 3: POST /photos
-      Purpose: Allows users to upload new photos via the form.
-      Caching Policy: Cache-Control: no-store
-      Reason: Upload routes involve user input and should never be cached. Ensures that no sensitive data or file references are stored in the browser or intermediary caches.
-      Security: Prevents replay attacks or accidental resubmissions by keeping responses out of cache entirely.
+
+        - Purpose: Allows users to upload new photos via the form.
+        - Caching Policy: Cache-Control: no-store
+        - Reason: Upload routes involve user input and should never be cached. Ensures that no sensitive data or file references are stored in the browser or intermediary caches.
+        - Security: Prevents replay attacks or accidental resubmissions by keeping responses out of cache entirely.
 
 - Route 4: POST /photos/:id/like
-      Purpose: Lets users like a photo, incrementing its like count up to a maximum.
-      Caching Policy: Cache-Control: no-store
-      Reason: Likes should reflect real-time interaction. Prevents stale data or incorrect like counts due to caching.
-      Security: Ensures accurate and immediate updates to content stored on the server.
+
+        - Purpose: Lets users like a photo, incrementing its like count up to a maximum.
+        - Caching Policy: Cache-Control: no-store
+        - Reason: Likes should reflect real-time interaction. Prevents stale data or incorrect like counts due to caching.
+        - Security: Ensures accurate and immediate updates to content stored on the server.
 
 - Route 5: GET /health
-      Purpose: Health check for uptime and monitoring tools.
-      Caching Policy: Cache-Control: no-store
-      Reason: This health check improves reliability by enabling automatic monitoring and maintenance of the application in production. It is no-store because this route should not be cache. Every request should return fresh, real-time status. Caching could lead to false positives or hide downtime.
-      Security: Only basic non-sensitive status info returned. It is safe to keep this endpoint publicly accessible for monitoring purposes.
 
-- Route 5: GET / (Static files: HTML, JS, CSS)
-      Purpose: Serves the UI and frontend logic from the /public directory.
-      Caching Policy: Cache-Control: public, max-age=600
-      Reason: These files rarely change during active use, so caching them for 10 minutes improves load time. Suitable for client-side assets like stylesheets and scripts.
-      Security: As these files don’t contain sensitive info, caching them is safe and efficient.
+        - Purpose: Health check for uptime and monitoring tools.
+        - Caching Policy: Cache-Control: no-store
+        - Reason: This health check improves reliability by enabling automatic monitoring and maintenance of the application in production. It is no-store because this route should not be cache. Every request should return fresh, real-time status. Caching could lead to false positives or hide downtime.
+        - Security: Only basic non-sensitive status info returned. It is safe to keep this endpoint publicly accessible for monitoring purposes.
+
+- Route 6: GET / (Static files: HTML, JS, CSS)
+
+        - Purpose: Serves the UI and frontend logic from the /public directory.
+        - Caching Policy: Cache-Control: public, max-age=600
+        - Reason: These files rarely change during active use, so caching them for 10 minutes improves load time. Suitable for client-side assets like stylesheets and scripts.
+        - Security: As these files don’t contain sensitive info, caching them is safe and efficient.
 
 ## Caching Strategy
 Each route was analyzed to determine whether its content benefits from caching and whether that caching could introduce security risks.
