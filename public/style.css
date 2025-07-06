@@ -1,25 +1,33 @@
+/* === General Reset and Base Styles === */
 * {
   box-sizing: border-box;
 }
-
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; 
+  overflow-x: hidden;
 }
-
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 30px;
   background: #f4f4f4;
   color: #333;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 30px;
 }
 
+/* === Typography & Layout === */
 h1 {
   text-align: center;
+  margin-bottom: 1rem;
 }
-
+h2 {
+  margin: 0;
+  font-size: 20px;
+}
+section {
+  margin-bottom: 2rem;
+}
 form {
   display: flex;
   flex-direction: column;
@@ -27,79 +35,124 @@ form {
   max-width: 400px;
   margin: 0 auto 30px;
 }
-
-input, button {
+label, input {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+input {
   padding: 10px;
   font-size: 16px;
 }
-
-.layout {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
+input:disabled,
+button:disabled {
+  background: #ddd;
+  color: #888;
+  cursor: not-allowed;
 }
 
-.gallery {
+/* === Buttons === */
+button {
+  background-color: #007BFF;
+  color: white;
+  padding: 10px 18px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+button:hover {
+  background-color: #0056b3;
+}
+button:active {
+  transform: scale(0.98);
+}
+button.full-width {
+  width: 100%;
+}
+table button {
+  padding: 0.3rem 0.6rem;
+  font-size: 14px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #222;
+  color: white;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* === Gallery Layout === */
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+.gallery,
+#gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 15px;
-  flex: 0 0 400px;
   max-height: 80vh;
+  overflow-y: auto;
+  padding-right: 5px;
 }
 
-.card {
+/* === Cards === */
+.card,
+.photo-card {
   background: #fff;
   border-radius: 5px;
-  overflow: hidden;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 150px;
+  overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s;
-  padding-bottom: 10px;
 }
-
-.card:hover {
+.card:hover,
+.photo-card:hover {
   transform: scale(1.03);
 }
-
-.card img {
+.card img,
+.photo-card img,
+img {
   width: 100%;
   height: 120px;
   object-fit: cover;
 }
-
 .card h3 {
   margin: 10px 0 5px;
   font-size: 14px;
   text-align: center;
 }
-
 .card p {
   font-size: 12px;
   margin: 0 10px 10px;
   text-align: center;
 }
 .card.selected {
-  outline: 2px solid #ff4081;
-} 
-
-.like-btn {
-  background: #ff4081;
-  color: white;
-  border: none;
-  padding: 6px;
-  width: 100%;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
-}
-.like-btn.unlike {
-  background: #ccc;
-  color: #000;
+  outline: 3px solid #007BFF;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 
+/* === Photo Details Panel === */
 .photo-details {
   flex: 1;
   max-width: 500px;
@@ -107,12 +160,9 @@ input, button {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0,0,0,0.1);
-  height: fit-content;
   position: sticky;
   top: 30px;
-  word-wrap: break-word;
 }
-
 .photo-details img {
   width: 100%;
   max-height: 400px;
@@ -120,19 +170,108 @@ input, button {
   margin: 10px 0;
 }
 
-/* Responsive for smaller screens */
+/* === Like Button === */
+.like-btn {
+  background-color: #f8ac2a;
+  color: #000;
+  padding: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.like-btn:hover {
+  background-color: #e69500;
+}
+.like-btn.unlike {
+  background-color: #ccc;
+  color: #000;
+}
+
+/* === Tables === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+/* === Dropdowns === */
+.like-select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* === Messages === */
+#register-message,
+#login-message,
+#message {
+  max-width: 400px;
+  margin: 10px auto 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* === Login/Register Page Links === */
+p a {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+/* === Google Sign-In Button === */
+#googleSignIn {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+#googleSignIn img {
+  cursor: pointer;
+  width: 191px;
+  height: 46px;
+}
+
+/* === Transitions & Effects === */
+section {
+  transition: opacity 0.3s ease;
+}
+
+/* === Responsive Adjustments === */
 @media (max-width: 768px) {
   .layout {
     flex-direction: column;
     align-items: center;
   }
-
-  .gallery {
-    width: 100%;
+  .gallery, .photo-details {
     max-width: 100%;
   }
+}
+@media (max-width: 480px) {
+  .card img,
+  .photo-card img {
+    height: 100px;
+  }
+  .photo-details img {
+    max-height: 250px;
+  }
+}
 
-  .photo-details {
-    max-width: 100%;
+@media (max-width: 768px) {
+  button {
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  button {
+    font-size: 14px;
+    padding: 4px 8px;
   }
 }

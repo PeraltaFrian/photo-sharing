@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="navbar"></div>
+  <h1>Admin Panel</h1>
+
+  <section>
+    <h2>Users</h2>
+    <table id="usersTable">
+      <thead>
+        <tr><th>Email</th><th>Role</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="3">Loading users...</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Photos</h2>
+    <table id="photosTable">
+      <thead>
+        <tr><th>Name</th><th>Image</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="3">Loading photos...</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <script src="js/navbar-loader.js" defer></script>
+  <script type="module" src="/js/api.js"></script>
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

@@ -2,31 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Photo Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Welcome to Photo Gallery</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="js/welcome.js" defer></script>
 </head>
 <body>
-  <h1>📷 Photo Gallery</h1>
+  <nav>
+    <button id="homeBtn">Home</button>
+    <button id="registerBtn">Register</button>
+    <button id="loginBtn">Login</button>
+  </nav>
 
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="text" name="name" placeholder="Photo Name" required />
-    <input type="text" name="description" placeholder="Description" required />
-    <input type="file" name="image" accept="image/*" required />
-    <button type="submit">Upload Photo</button>
-  </form>
-
-  <div class="layout">
-    <div id="gallery" class="gallery"></div>
-
-    <div id="details" class="photo-details">
-      <h2 id="detail-name"></h2>
-      <img id="detail-img" src="" alt="" />
-      <p id="detail-desc"></p>
-      <p id="detail-likes"></p>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+  <h1>Welcome to Photo Gallery</h1>
+  <p>Please <a href="login.html">Login</a> or <a href="register.html">Register</a> to continue.</p>
 </body>
 </html>

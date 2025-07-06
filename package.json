@@ -2,21 +2,32 @@
   "name": "photo-sharing-app",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "description": "",
   "dependencies": {
-    "contentful": "^11.7.1",
-    "contentful-management": "^11.52.2",
+    "argon2": "^0.43.0",
+    "bcrypt": "^6.0.0",
+    "contentful": "^11.7.3",
+    "contentful-management": "^11.54.0",
+    "cookie-parser": "^1.4.7",
+    "csurf": "^1.11.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
+    "express-session": "^1.18.1",
     "helmet": "^8.1.0",
-    "https": "^1.0.0",
-    "multer": "^2.0.1"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.0",
+    "multer": "^2.0.1",
+    "nodemailer": "^7.0.4",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
   }
 }
